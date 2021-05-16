@@ -25,7 +25,7 @@ describe('people api', function() {
     let response = await axios.get('/people');
     let people = response.data;
     let strippedPeople = people.map(person => {
-      delete person.personId;
+      delete person.id;
       delete person.createdAt;
       return person;
     });
@@ -43,7 +43,7 @@ describe('people api', function() {
     response = await axios.get('/people');
     people = response.data;
     strippedPeople = people.map(person => {
-      delete person.personId;
+      delete person.id;
       delete person.createdAt;
       return person;
     });
@@ -69,7 +69,7 @@ describe('companies api', function() {
     let response = await axios.get('/companies');
     let companies = response.data;
     let strippedCompanies = companies.map(company => {
-      delete company.companyId;
+      delete company.id;
       delete company.createdAt;
       return company;
     });

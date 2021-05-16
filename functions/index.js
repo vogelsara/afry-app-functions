@@ -32,7 +32,7 @@ app.get('/people', (req, res) => {
             let people = [];
             data.forEach(doc => {
                 people.push({
-                    personId: doc.id,
+                    id: doc.id,
                     name: doc.data().name,
                     companyId: doc.data().companyId,
                     createdAt: doc.data().createdAt
@@ -111,7 +111,7 @@ app.get('/companies', (req, res) => {
             let companies = [];
             data.forEach(doc => {
                 companies.push({
-                    companyId: doc.id,
+                    id: doc.id,
                     name: doc.data().name,
                     createdAt: doc.data().createdAt
                 });
