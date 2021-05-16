@@ -5,6 +5,16 @@ const { expect } = require('chai');
 const chai = require('chai');
 const assert = chai.assert;
 
+function stripResponseData(response) {
+  let dataArray = response.data;
+  let strippedData = dataArray.map(member => {
+    delete member.id;
+    delete member.createdAt;
+    return member;
+  });
+  return strippedData;
+}
+
 describe('people api', function() {
   it('responds with matching records', async function() {
     const person1 = {
@@ -23,13 +33,7 @@ describe('people api', function() {
 
     let expectedResult = [person2, person1]
     let response = await axios.get('/people');
-    let people = response.data;
-    let strippedPeople = people.map(person => {
-      delete person.id;
-      delete person.createdAt;
-      return person;
-    });
-    expect(strippedPeople).to.eql(expectedResult);
+    expect(stripResponseData(response)).to.eql(expectedResult);
 
     const newCompanyID = 'companyId';
     const newPerson1 = {
@@ -41,13 +45,7 @@ describe('people api', function() {
 
     expectedResult = [person2, newPerson1]
     response = await axios.get('/people');
-    people = response.data;
-    strippedPeople = people.map(person => {
-      delete person.id;
-      delete person.createdAt;
-      return person;
-    });
-    expect(strippedPeople).to.eql(expectedResult);
+    expect(stripResponseData(response)).to.eql(expectedResult);
 
   });
 }); 
@@ -67,12 +65,6 @@ describe('companies api', function() {
 
     let expectedResult = [company2, company1]
     let response = await axios.get('/companies');
-    let companies = response.data;
-    let strippedCompanies = companies.map(company => {
-      delete company.id;
-      delete company.createdAt;
-      return company;
-    });
-    expect(strippedCompanies).to.eql(expectedResult);
+    expect(stripResponseData(response)).to.eql(expectedResult);
   });
 }); 
