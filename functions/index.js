@@ -104,9 +104,7 @@ app.post('/company', (req, res) => {
 });
 
 app.get('/companies', (req, res) => {
-    admin
-        .firestore()
-        .collection('companies')
+    db.collection('companies')
         .orderBy('createdAt', 'desc')
         .get()
         .then(data => {
