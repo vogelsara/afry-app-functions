@@ -52,12 +52,37 @@ app.post('/person', (req, res) => {
     db.collection('people')
         .add(newPerson)
         .then(doc => {
-            res.json({message: `person ${doc.id} created successfully`});
+            res.json({
+                message: `person ${doc.id} created successfully`,
+                id: doc.id
+            });
         })
         .catch(err => {
             res.status(500).json({error: 'something went wrong'});
             console.error(err);
+        });
+});
+
+app.put('/person/:personId', (req, res) => {
+    const document = db.doc(`/people/${req.params.personId}`);
+    document
+        .get()
+        .then((doc) => {
+            if (!doc.exists) {
+                return res.status(404).json({ error: 'Person not found' });
+            }
+            let newData = {};
+            if ('name' in req.body) newData.name = req.body.name;
+            if ('companyId' in req.body) newData.companyId = req.body.companyId;
+            document.update(newData);
         })
-})
+        .then(() => {
+            res.json({ message: `Person ${document.id} updated successfully` });
+        })
+        .catch((err) => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+});
 
 exports.api = functions.region('europe-west1').https.onRequest(app); 

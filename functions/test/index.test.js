@@ -17,17 +17,37 @@ describe('people api', function() {
       companyId: 'cmpdEbj9Ssax8vGSr9el',
     };
 
-    axios.post('/person', person1);
-    axios.post('/person', person2);
+    const postResult = await axios.post('/person', person1);
+    const person1Id = postResult.data.id;
+    await axios.post('/person', person2);
 
-    const expectedResult = [person1, person2]
-    const response = await axios.get('/people');
-    const people = response.data;
-    const strippedPeople = people.map(person => {
+    let expectedResult = [person2, person1]
+    let response = await axios.get('/people');
+    let people = response.data;
+    let strippedPeople = people.map(person => {
       delete person.personId;
       delete person.createdAt;
       return person;
     });
     expect(strippedPeople).to.eql(expectedResult);
+
+    const newCompanyID = 'companyId';
+    const newPerson1 = {
+      name: 'Kalle Kula',
+      companyId: newCompanyID,
+    };
+
+    await axios.put(`/person/${person1Id}`, {companyId: newCompanyID});
+
+    expectedResult = [person2, newPerson1]
+    response = await axios.get('/people');
+    people = response.data;
+    strippedPeople = people.map(person => {
+      delete person.personId;
+      delete person.createdAt;
+      return person;
+    });
+    expect(strippedPeople).to.eql(expectedResult);
+
   });
 }); 
