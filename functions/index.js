@@ -85,4 +85,42 @@ app.put('/person/:personId', (req, res) => {
         });
 });
 
+app.post('/company', (req, res) => {
+    const newCompany = {
+        name: req.body.name,
+        createdAt: new Date().toISOString()
+    };
+
+    admin.firestore()
+        .collection('companies')
+        .add(newCompany)
+        .then(doc => {
+            res.json({message: `company ${doc.id} created successfully`});
+        })
+        .catch(err => {
+            res.status(500).json({error: 'something went wrong'});
+            console.error(err);
+        });
+});
+
+app.get('/companies', (req, res) => {
+    admin
+        .firestore()
+        .collection('companies')
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then(data => {
+            let companies = [];
+            data.forEach(doc => {
+                companies.push({
+                    companyId: doc.id,
+                    name: doc.data().name,
+                    createdAt: doc.data().createdAt
+                });
+            });
+            return res.json(companies);
+        })
+        .catch(err => console.error(err));
+});
+
 exports.api = functions.region('europe-west1').https.onRequest(app); 

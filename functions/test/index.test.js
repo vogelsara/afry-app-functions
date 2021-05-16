@@ -51,3 +51,28 @@ describe('people api', function() {
 
   });
 }); 
+
+describe('companies api', function() {
+  it('responds with matching records', async function() {
+    const company1 = {
+      name: 'Super Company'
+    };
+
+    const company2 = {
+      name: 'Not So Good Company'
+    };
+
+    await axios.post('/company', company1);
+    await axios.post('/company', company2);
+
+    let expectedResult = [company2, company1]
+    let response = await axios.get('/companies');
+    let companies = response.data;
+    let strippedCompanies = companies.map(company => {
+      delete company.companyId;
+      delete company.createdAt;
+      return company;
+    });
+    expect(strippedCompanies).to.eql(expectedResult);
+  });
+}); 
