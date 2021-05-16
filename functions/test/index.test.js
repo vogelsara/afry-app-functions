@@ -7,24 +7,27 @@ const assert = chai.assert;
 
 describe('people api', function() {
   it('responds with matching records', async function() {
-    const expectedResult = [
-      {
-        name: 'Kalle Kula',
-        companyId: null,
-        createdAt: '2021-05-11T19:17:41.123Z'
-      },
-      {
-        name: 'John Doe',
-        companyId: 'cmpdEbj9Ssax8vGSr9el',
-        createdAt: '2021-05-11T19:16:41.123Z'
-      }
-    ]
+    const person1 = {
+      name: 'Kalle Kula',
+      companyId: null,
+    };
+
+    const person2 = {
+      name: 'John Doe',
+      companyId: 'cmpdEbj9Ssax8vGSr9el',
+    };
+
+    axios.post('/person', person1);
+    axios.post('/person', person2);
+
+    const expectedResult = [person1, person2]
     const response = await axios.get('/people');
     const people = response.data;
-    const peopleWithoutId = people.map(person => {
+    const strippedPeople = people.map(person => {
       delete person.personId;
+      delete person.createdAt;
       return person;
     });
-    expect(peopleWithoutId).to.eql(expectedResult);
+    expect(strippedPeople).to.eql(expectedResult);
   });
 }); 

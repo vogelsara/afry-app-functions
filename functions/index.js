@@ -43,4 +43,21 @@ app.get('/people', (req, res) => {
         .catch(err => console.error(err));
 });
 
+app.post('/person', (req, res) => {
+    const newPerson = {
+        name: req.body.name,
+        companyId: req.body.companyId,
+        createdAt: new Date().toISOString()
+    };
+    db.collection('people')
+        .add(newPerson)
+        .then(doc => {
+            res.json({message: `person ${doc.id} created successfully`});
+        })
+        .catch(err => {
+            res.status(500).json({error: 'something went wrong'});
+            console.error(err);
+        })
+})
+
 exports.api = functions.region('europe-west1').https.onRequest(app); 
