@@ -8,7 +8,7 @@ let db = {
     ],
     companies: [
         {
-            name: 'Comapany Name',
+            name: 'Company Name',
             createdAt: '2021-05-11T19:16:41.123Z'
         }
     ]
