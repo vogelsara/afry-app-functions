@@ -53,8 +53,10 @@ app.post('/person', (req, res) => {
         .add(newPerson)
         .then(doc => {
             res.json({
-                message: `person ${doc.id} created successfully`,
-                id: doc.id
+                id: doc.id,
+                name: doc.data().name,
+                companyId: doc.data().companyId,
+                createdAt: doc.data().createdAt
             });
         })
         .catch(err => {
