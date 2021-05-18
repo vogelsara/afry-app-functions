@@ -96,11 +96,17 @@ app.post('/company', (req, res) => {
         createdAt: new Date().toISOString()
     };
 
-    admin.firestore()
-        .collection('companies')
+    db.collection('companies')
         .add(newCompany)
-        .then(doc => {
-            res.json({message: `company ${doc.id} created successfully`});
+        .then(docRef => {
+            docRef.get()
+                .then(doc => {
+                    res.json({
+                        id: doc.id,
+                        name: doc.data().name,
+                        createdAt: doc.data().createdAt
+                    })
+                })
         })
         .catch(err => {
             res.status(500).json({error: 'something went wrong'});
