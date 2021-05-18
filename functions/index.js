@@ -51,13 +51,16 @@ app.post('/person', (req, res) => {
     };
     db.collection('people')
         .add(newPerson)
-        .then(doc => {
-            res.json({
-                id: doc.id,
-                name: doc.data().name,
-                companyId: doc.data().companyId,
-                createdAt: doc.data().createdAt
-            });
+        .then(docRef => {
+            docRef.get()
+                .then(doc => {
+                    res.json({
+                        id: doc.id,
+                        name: doc.data().name,
+                        companyId: doc.data().companyId,
+                        createdAt: doc.data().createdAt
+                    })
+                })
         })
         .catch(err => {
             res.status(500).json({error: 'something went wrong'});
