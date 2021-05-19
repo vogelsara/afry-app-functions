@@ -79,22 +79,22 @@ app.put('/person/:personId', (req, res) => {
             let newData = {};
             if ('name' in req.body) newData.name = req.body.name;
             if ('companyId' in req.body) newData.companyId = req.body.companyId;
-            document.update(newData);
-        })
-        .then(() => {
-            document.get()
-                .then(doc => {
-                    res.json({
-                        id: doc.id,
-                        name: doc.data().name,
-                        companyId: doc.data().companyId,
-                        createdAt: doc.data().createdAt
-                    })
+            document.update(newData)
+                .then(() => {
+                    document.get()
+                        .then(doc => {
+                            res.json({
+                                id: doc.id,
+                                name: doc.data().name,
+                                companyId: doc.data().companyId,
+                                createdAt: doc.data().createdAt
+                            })
+                        })
                 })
-        })
-        .catch((err) => {
-            console.error(err);
-            return res.status(500).json({ error: err.code });
+                .catch((err) => {
+                    console.error(err);
+                    return res.status(500).json({ error: err.code });
+            });
         });
 });
 
