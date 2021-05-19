@@ -82,7 +82,15 @@ app.put('/person/:personId', (req, res) => {
             document.update(newData);
         })
         .then(() => {
-            res.json({ message: `Person ${document.id} updated successfully` });
+            document.get()
+                .then(doc => {
+                    res.json({
+                        id: doc.id,
+                        name: doc.data().name,
+                        companyId: doc.data().companyId,
+                        createdAt: doc.data().createdAt
+                    })
+                })
         })
         .catch((err) => {
             console.error(err);
