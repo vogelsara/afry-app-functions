@@ -21,5 +21,11 @@
     "firebase-functions-test": "^0.2.3",
     "mocha": "^8.4.0"
   },
-  "private": true
+  "private": true,
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
+  }
 }
