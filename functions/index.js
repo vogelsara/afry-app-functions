@@ -95,6 +95,24 @@ app.put('/person/:personId', (req, res) => {
     })
 })
 
+app.delete('/person/:personId', (req, res) => {
+    const document = db.doc(`/people/${req.params.personId}`)
+    document.get().then((doc) => {
+        if (!doc.exists) {
+            return res.status(404).json({ error: 'Person not found' })
+        }
+        document
+            .delete(document)
+            .then(() => {
+                return res.json({ id: req.params.personId })
+            })
+            .catch((err) => {
+                console.error(err)
+                return res.status(500).json({ error: err.code })
+            })
+    })
+})
+
 app.post('/company', (req, res) => {
     const newCompany = {
         name: req.body.name,
@@ -134,6 +152,24 @@ app.get('/companies', (req, res) => {
             return res.json(companies)
         })
         .catch((err) => console.error(err))
+})
+
+app.delete('/company/:companyId', (req, res) => {
+    const document = db.doc(`/companies/${req.params.companyId}`)
+    document.get().then((doc) => {
+        if (!doc.exists) {
+            return res.status(404).json({ error: 'Company not found' })
+        }
+        document
+            .delete(document)
+            .then(() => {
+                return res.json({ id: req.params.companyId })
+            })
+            .catch((err) => {
+                console.error(err)
+                return res.status(500).json({ error: err.code })
+            })
+    })
 })
 
 exports.api = functions.region('europe-west1').https.onRequest(app)
